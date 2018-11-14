@@ -8,21 +8,29 @@ import javax.persistence.*;
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User {
     @Id
-    @Column(name = "username",length = 20, nullable = false, unique = true)
+    @Column(name = "username", length = 20, nullable = false, unique = true)
     private String username;
 
-    @Column(name = "password",length = 50, nullable = false)
+    @Column(name = "password", length = 50, nullable = false)
     private String password;
 
-    @Column(name = "admin",nullable = false)
+    @Column(name = "firstname", length = 20, nullable = false)
+    private String firstName;
+
+    @Column(name = "lastname", length = 20, nullable = false)
+    private String lastName;
+
+    @Column(name = "admin", nullable = false)
     private Boolean admin;
 
     public User() {
     }
 
-    public User(String username,String password, Boolean admin) {
+    public User(String username, String password, String firstName, String lastName, Boolean admin) {
         this.username = username;
-        this.setPassword(password);
+        this.setEncryptedPassword(password);
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.admin = admin;
     }
 
@@ -34,16 +42,41 @@ public class User {
         this.username = username;
     }
 
-    public void setPassword(String password) {
+    public void setEncryptedPassword(String password) {
         this.password = Utils.getMD5Hash(password);
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     @Override
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", admin=" + admin +
                 '}';
     }
